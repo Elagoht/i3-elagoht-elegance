@@ -1,0 +1,6 @@
+#!/usr/bin/python3
+from os import popen
+sensors=popen("sensors").read()
+CPU=sensors.split("Composite:")[1].split("(")[0].strip().replace("+","")
+AmdUsage=int(float(popen("grep 'cpu ' /proc/stat | awk '{usage=($2+$4)*100/($2+$4+$5)}; {print usage}'").read()))
+print(f"\ue266 {AmdUsage}% {CPU}")

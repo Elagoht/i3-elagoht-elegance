@@ -1,0 +1,323 @@
+######################################################################
+#                                                                    #
+#  i3 Config by Elagoht                                              #
+#                                                                    #
+#  PLEASE READ ALL THE CONFIG FILE TO UNDERSTAND WHAT HAPPENS!       #
+#                                                                    #
+#  Requirements:                                                     #
+#                                                                    #
+#      * nm-applet (for wifi applet)                                 #
+#      * blueberry (for bluetooth applet)                            #
+#      * nitrogen (for wallpaper)                                    #
+#      * lxappearance (for fluent dark theme)                        #
+#      * xcompmgr (for transparency) (picom blocks screenshots)      #
+#      * DroidSansMono Nerd Font (for i3bar icons)                   #
+#      * amixer (for volume control)                                 #
+#      * playerctl (for control media)                               #
+#      * rofi (for application menu)                                 #
+#      * i3blocks (for custom status bar)                            #
+#      * gnome-screenshot (for print screen)                         #
+#      * xrandr (for controlling monitors and brightness)            #
+#      * brightnessctl (for controll brightness hardware level)      #
+#                                                                    #
+#  Run These Command(s):                                             #
+#                                                                    #
+#      * sudo chmod +s /usr/bin/brightnessctl                        #
+#                                                                    #
+#  Custom Startup Applications                                       #
+#                                                                    #
+#    To set startup applicatios go to Startup Applications section   #
+#    and write "exec application-name" for each instance you want    #
+#    to start at login. If you use i3 4.20+ you can use my           #
+#    i3-startup-applications script                                  #
+#                                                                    #
+#  Special Needs                                                     #
+#                                                                    #
+#    Every user may need specific commands to fit this desktop for   #
+#    their comfort. I.e. I close my laptop screen on startup. I can  #
+#    easily change display with mod+shift+p shortcut I set before.   #
+#                                                                    #
+#  To-Do                                                             #
+#                                                                    #
+#    Color picker. I wrote the required code but for something I     #
+#    can't understad, it is not working properly with keybinds.      #
+#                                                                    #
+######################################################################
+
+# CHANGING HABITS
+# If I want to say someting to i3 or directly operating system, I use MOD+SHIFT keys.
+# I use MOD key in keybinds with only letters to start applications. (I.e: $mod+s to open spotify.)
+# This is an early version of Elagoht Elegane
+
+# SPECIAL NEEDS HERE
+  # Put your systems pecial needs here. It may be turning off laptop screen, changing behaviour of touchpad, setting audio autput device or something else.
+
+# Set modifier key as "super"
+set $mod Mod4
+
+# Monitor management
+  # Swithcer
+  bindsym $mod+Shift+p exec ~/.config/i3/monitor 
+  # This works if there is only one monitor connected.
+  exec ~/.config/i3/singlemonitor 
+
+# Font
+font pango:DroidSansMono Nerd Font Book 10 
+
+# Screen Lock
+bindsym $mod+Shift+l exec i3lock -c 000000
+# Black because I love my eyes
+
+# Applets
+exec --no-startup-id nm-applet # Network connection manager applet
+exec --no-startup-id blueberry-tray # bluetooth connection manager applet
+
+# Use amixer to adjust volume in PulseAudio.
+bindsym XF86AudioRaiseVolume exec amixer sset -D pulse Master 5%+
+bindsym XF86AudioLowerVolume exec amixer sset -D pulse Master 5%-
+bindsym XF86AudioMute exec amixer sset -D pulse Master toggle
+bindsym $mod+F2 exec amixer sset -D pulse Master toggle
+bindsym XF86AudioMicMute exec amixer sset -D pulse Capture toggle
+bindsym $mod+F1 exec amixer sset -D pulse Capture toggle
+
+# Media Controls 
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioPrev exec playerctl previous
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioStop exec playerctl stop
+
+# Brightness shortcuts via python file
+  # Builtin display
+  bindsym XF86MonBrightnessUp exec brightnessctl s 5%+
+  bindsym $mod+Shift+KP_Add exec brightnessctl s 5%+
+  bindsym XF86MonBrightnessDown exec brightnessctl s 5%-
+  bindsym $mod+Shift+KP_Subtract exec brightnessctl s 5%-
+  # Secondary monitor 
+  # TYPE YOUR MONITOR NAME,  you can learn it by writing command below
+  # xrandr | grep " connected"
+  bindsym Mod1+XF86MonBrightnessUp exec ~/.config/i3/brightness -u YOURMONITORSNAME
+  bindsym $mod+Shift+Mod1+KP_Add exec ~/.config/i3/brightness -u YOURMONITORSNAME
+  bindsym Mod1+XF86MonBrightnessDown exec ~/.config/i3/brightness -d YOURMONITORSNAME
+  bindsym $mod+Shift+Mod1+KP_Subtract exec ~/.config/i3/brightness -d YOURMONITORSNAME
+
+# Use leftclick+$mod to move, rightclick+$mod to resize
+floating_modifier $mod
+
+# Kill focused window
+bindsym $mod+Shift+q kill
+bindsym Mod1+F4 kill # for habits.
+
+# Application menu and terminal
+bindsym $mod+d exec "rofi -modi drun,run -show drun"
+
+# Focus windows
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# Cycle windows
+bindsym Mod1+Tab focus right
+bindsym Control+Mod1+Tab focus down
+bindsym Mod1+Shift+Tab focus left
+bindsym Control+Mod1+Shift+Tab focus up
+
+# Move windows
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# Toggle split orientation
+bindsym $mod+Shift+v split vertical
+bindsym $mod+Shift+h split horizontal
+
+# Enter fullscreen mode for the focused container
+bindsym $mod+Shift+F11 fullscreen toggle
+bindsym $mod+Shift+f fullscreen toggle
+
+# Change container layout (stacked, tabbed, toggle split)
+bindsym $mod+Shift+s layout stacking # Do anyone use it?
+bindsym $mod+Shift+w layout tabbed
+bindsym $mod+Shift+e layout toggle split
+
+# Toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# Change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# Focus the parent container
+bindsym $mod+Shift+a focus parent
+
+# Focus the child container
+bindsym $mod+Shift+d focus child
+
+# Workspaces 
+set $ws1 "1: Project"
+set $ws2 "2: Workbench"
+set $ws3 "3:爵 Web"
+set $ws4 "4: Message"
+set $ws5 "5: Game"
+set $ws6 "6: Media"
+set $ws7 "7: Study"
+set $ws8 "8: Edit"
+set $ws9 "9: Music"
+set $ws10 "10: Other"
+
+# switch to workspace
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
+bindsym $mod+0 workspace $ws10
+
+# Move windows to workspace and go that workspace
+bindsym $mod+Shift+1 move container to workspace $ws1; workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2; workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3; workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4; workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5; workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6; workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7; workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8; workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9; workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws10; workspace $ws10
+
+# Cycle active workspaces
+bindsym $mod+Tab workspace next
+bindsym $mod+Shift+Tab workspace prev
+
+# Reload the configuration file
+bindsym $mod+Shift+c reload
+# Restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym Control+Mod1+Escape reload
+# Exit i3 (logs you out of your X session)
+bindsym $mod+Shift+Delete exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+
+# Resize window (You can also use rightclick for that)
+mode "resize" {
+  # Resize windows with arrow keys
+  bindsym Left resize shrink width 10 px
+  bindsym Down resize grow height 10 px
+  bindsym Up resize shrink height 10 px
+  bindsym Right resize grow width 10 px
+
+  # back to normal
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+  bindsym $mod+Shift+r mode "default"
+}
+bindsym $mod+Shift+r mode "resize"
+
+# Move window (But stay in current workspace)
+mode "move" {
+  # switch to workspace
+  bindsym $mod+1 workspace $ws1
+  bindsym $mod+2 workspace $ws2
+  bindsym $mod+3 workspace $ws3
+  bindsym $mod+4 workspace $ws4
+  bindsym $mod+5 workspace $ws5
+  bindsym $mod+6 workspace $ws6
+  bindsym $mod+7 workspace $ws7
+  bindsym $mod+8 workspace $ws8
+  bindsym $mod+9 workspace $ws9
+  bindsym $mod+0 workspace $ws10
+
+  # move focused container to workspace
+  bindsym $mod+Shift+1 move container to workspace $ws1
+  bindsym $mod+Shift+2 move container to workspace $ws2
+  bindsym $mod+Shift+3 move container to workspace $ws3
+  bindsym $mod+Shift+4 move container to workspace $ws4
+  bindsym $mod+Shift+5 move container to workspace $ws5
+  bindsym $mod+Shift+6 move container to workspace $ws6
+  bindsym $mod+Shift+7 move container to workspace $ws7
+  bindsym $mod+Shift+8 move container to workspace $ws8
+  bindsym $mod+Shift+9 move container to workspace $ws9
+  bindsym $mod+Shift+0 move container to workspace $ws10
+
+  # back to normal
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+  bindsym $mod+Shift+m mode "default"
+}
+bindsym $mod+Shift+m mode "move"
+
+# i3bar
+bar {
+  i3bar_command i3bar
+  status_command i3blocks
+  strip_workspace_numbers yes
+  separator_symbol " " 
+  position top
+  height 28
+  tray_padding 6
+  colors{
+    background         #131313
+    statusline         #ffffff
+    separator          #d2c452
+    active_workspace   #333333 #792E78 #ffffff
+    focused_workspace  #a95Ea8 #792E78 #ffffff
+    inactive_workspace #513E51 #222222 #ffffff
+    urgent_workspace   #a9a85E #79782E #ffffff
+    binding_mode       #008576 #16b8a5 #000000
+  }
+}
+
+# Specific floating
+for_window [class="Passenger"] floating enable
+for_window [title="Screenshot"] floating enable
+for_window [class="^."] pixel 2
+default_border pixel 2
+ 
+# Disable focusing mouse hover
+focus_follows_mouse no
+mouse_warping none
+
+# Gaps
+gaps inner 10
+gaps outer 2
+
+# Titlebar customization
+show_marks yes
+title_align center
+client.focused          #a95Ea8 #792E78 #ffffff #d99Ed8 #a95Ea8 
+client.focused_inactive #222222 #111111 #ffffff #292A2E #222222
+client.unfocused        #303030 #202020 #888888 #666666 #303030
+client.urgent           #7F3700 #8F4700 #ffffff #8F4700 #8F4700
+
+# Screenshot management
+  # To save them to file 
+  bindsym Control+Print exec gnome-screenshot -f $HOME/Pictures/screenshot-$(date +%d.%m.%y-%H:%M:%S).png
+  bindsym Control+Mod4+Print exec gnome-screenshot -w -f $HOME/Pictures/screenshot-$(date +%d.%m.%y-%H:%M:%S).png
+  bindsym Control+Shift+Print exec gnome-screenshot -a -f $HOME/Pictures/screenshot-$(date +%d.%m.%y-%H:%M:%S).png
+
+  # to copy them (to be sure to work on all systems, saving to tmp)
+  bindsym Print exec gnome-screenshot -cf /tmp/test && cat /tmp/test | xclip -i -selection clipboard -target image/png
+  bindsym Mod4+Print exec gnome-screenshot -wcf /tmp/test && cat /tmp/test | xclip -i -selection clipboard -target image/png
+  bindsym Shift+Print exec gnome-screenshot -acf /tmp/test && cat /tmp/test | xclip -i -selection clipboard -target image/png
+
+# Nitrogen restore last wallpaper
+exec nitrogen --restore
+
+# Transparency
+exec xcompmgr
+
+# Startup Applications
+  # Type exec and write the command needed to start your applications.
+  # If you use i3 4.20+ you can use my i3-startup-applications script. (Found it on my github page)
+
+# Custom Keybindings
+  # This starts your default terminal. You don't need to change it.
+  bindsym $mod+Return exec x-terminal-emulator
+  # This starts your default browser. You don't need to change it.
+  bindsym $mod+w      exec sensible-browser
+  # This starts your default file manager. You don't need to change it.
+  bindsym $mod+e      exec xdg-open $HOME
+  # This starts your default file manager in Downloads directory. You don't need to change it.
+  bindsym $mod+j      exec xdg-open $HOME/Downloads

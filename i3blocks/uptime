@@ -1,0 +1,5 @@
+#!/usr/bin/python3
+from os import popen
+from time import gmtime, strftime
+uptime=strftime("%H:%M",gmtime(int(popen("cat /proc/uptime").read().split()[0].split(".")[0])))
+print(f"{uptime} \ufc8a ")

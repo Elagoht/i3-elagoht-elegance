@@ -1,0 +1,4 @@
+#!/usr/bin/python3
+from os import system,popen
+monitors=[i.split()[0] for i in popen("xrandr | grep ' connected'").read().strip().split("\n")]
+if len(monitors)==1: system(f"xrandr --output {monitors[0]} --auto --primary")

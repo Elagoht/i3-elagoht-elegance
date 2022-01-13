@@ -1,0 +1,29 @@
+#!/usr/bin/python3
+from os import popen
+battery=int(popen("upower -i $(upower -e | grep 'BAT') | grep -E \"percentage\"").read().split(":")[1].strip().replace("%",""))
+batter_status=popen("upower -i `upower -e | grep 'BAT'` | grep state").read().split(":")[1].strip()
+if batter_status=="discharging":
+    if battery> 0: battermoji="\uf58d"
+    if battery>10: battermoji="\uf579"
+    if battery>20: battermoji="\uf57a"
+    if battery>30: battermoji="\uf57b"
+    if battery>40: battermoji="\uf57c"
+    if battery>50: battermoji="\uf57d"
+    if battery>60: battermoji="\uf57e"
+    if battery>70: battermoji="\uf57f"
+    if battery>80: battermoji="\uf580"
+    if battery>90: battermoji="\uf581"
+    if battery==100: battermoji="\uf578"
+else:
+    if battery> 0: battermoji="\uf58d"
+    if battery>10: battermoji="\ufd06"
+    if battery>20: battermoji="\ufd07"
+    if battery>30: battermoji="\ufd08"
+    if battery>40: battermoji="\ufd09"
+    if battery>50: battermoji="\ufd0a"
+    if battery>60: battermoji="\ufd0b"
+    if battery>70: battermoji="\ufd0c"
+    if battery>80: battermoji="\ufd0d"
+    if battery>90: battermoji="\ufd0e"
+    if battery==100: battermoji="\ufd05"
+print(f"{battery}% {battermoji} ")

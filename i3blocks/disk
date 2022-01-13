@@ -1,0 +1,5 @@
+#!/usr/bin/python3
+from os import popen
+disk=int(popen("df / | grep /").read().split()[4].replace("%",""))
+diskmoji="\uf6d0" if disk>=90 else "\ufaed"
+print(f"{diskmoji} {disk}%")

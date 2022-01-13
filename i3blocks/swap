@@ -1,0 +1,7 @@
+#!/usr/bin/python3
+from os import popen
+vmstat=popen("vmstat -s").read()
+SwapTotal=int(int(vmstat.split("swap cache")[1].split("K")[0].strip())/1024)
+SwapUsed=int(int(vmstat.split("total swap")[1].split("K")[0].strip())/1024)
+SwapPercent=int(float("{:.2f}".format(SwapUsed/SwapTotal))*100)
+print(f"\uf9e0 {SwapPercent}% {SwapUsed}/{SwapTotal}MB")

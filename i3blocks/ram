@@ -1,0 +1,7 @@
+#!/usr/bin/python3
+from os import popen
+vmstat=popen("vmstat -s").read()
+RamTotal=int(int(vmstat.split("K")[0])/1024)
+RamUsed=int(int(vmstat.split("total memory")[1].split()[0])/1024)
+RamPercent=int(float("{:.2f}".format(RamUsed/RamTotal))*100)
+print(f"\uf85a {RamPercent}% {RamUsed}/{RamTotal}MB")

@@ -1,0 +1,5 @@
+#!/usr/bin/python3
+from os import popen
+clock=popen("date +%H:%M:%S").read().strip()
+date=popen("date +%d/%m/%Y").read().strip()
+print(f"\uf455 {date} \uf64f {clock}")

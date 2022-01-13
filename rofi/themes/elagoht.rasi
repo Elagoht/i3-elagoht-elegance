@@ -1,0 +1,52 @@
+* {
+    color:#eee;
+    background-color:#0000;
+    background:#333e;
+}
+#window {
+    background-color:@background;
+    border-color:#a5a;
+    border:2;
+    padding:4;
+}
+#message {
+    border:2;
+    padding:4;
+}
+#listview {
+    fixed-height:0;
+    scrollbar:true;
+}
+#element {
+    padding:4;
+    margin:0 4;
+}
+#element.selected.normal {
+    background-color:#a5a;
+    text-color:white;
+}
+element-icon {
+  size:2ch;
+}
+#scrollbar {
+    handle-color:#a5a;
+    handle-width:4px;
+}
+#button {
+    spacing:4;
+}
+#button.selected {
+    background-color:#a5a;
+}
+#inputbar {
+    background-color:#0003;
+    padding:4;
+    margin:4;
+}
+#inputbar {
+    children:[prompt,textbox-prompt-colon,entry,case-indicator];
+}
+#textbox-prompt-colon {
+    expand:    false;
+    str:       ":";
+}

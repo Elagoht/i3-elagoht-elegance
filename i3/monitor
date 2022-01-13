@@ -1,0 +1,58 @@
+#!/usr/bin/python3
+
+#########################################
+# ONLY FOR DUAL MONITOR SETUPS          #
+# Set config directory for custom usage #
+#########################################
+
+# requirements
+from os import system,popen
+
+# config directory
+dir=popen("echo $HOME").read().strip()+"/.config/i3/"
+
+# get monitors
+monitors=[i.split()[0] for i in popen("xrandr | grep ' connected'").read().strip().split("\n")]
+monitors.remove(popen("xrandr | grep 'primary'").read().split()[0])
+monitors=[popen("xrandr | grep 'primary'").read().split()[0]]+monitors
+
+# load settings
+with open(dir+"monitor.conf","r") as conf: mode=conf.readline()
+if mode=="": mode="0"
+try: mode=int(mode)
+except: mode=0
+
+# change mode
+mode+=1
+if mode>4: mode=0
+if len(monitors)<2: mode=3
+
+# mirror
+if mode==0:
+    system(f"xrandr --output {monitors[0]} --auto --primary")
+    system(f"xrandr --output {monitors[1]} --auto --same-as {monitors[0]}")
+
+# others<primary
+if mode==1:
+    system(f"xrandr --output {monitors[0]} --auto --primary")
+    system(f"xrandr --output {monitors[1]} --auto --left-of {monitors[0]}")
+
+# primary>others
+if mode==2:
+    system(f"xrandr --output {monitors[0]} --auto --primary")
+    system(f"xrandr --output {monitors[1]} --auto --right-of {monitors[0]}")
+
+# only primary
+if mode==3:
+    system(f"xrandr --output {monitors[0]} --auto --primary")
+    system(f"xrandr --output {monitors[1]} --off")
+
+# only secondary
+if mode==4:
+    system(f"xrandr --output {monitors[1]} --auto --primary")
+    system(f"xrandr --output {monitors[0]} --off")
+
+# save settings
+with open(dir+"monitor.conf","w") as conf: conf.write(str(mode))
+print(mode)
+print(monitors)

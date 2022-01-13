@@ -1,0 +1,69 @@
+#!/usr/bin/python3
+
+# I'm currently working on this. 
+
+from os import popen
+volumes=popen("amixer sget -D pulse Master | grep %").read()
+volume=int(volumes.split("[")[1].split("%")[0])
+mute=(volumes.split("[")[2].split("]")[0])=="off"
+if volume>0: volmoji="\uFA7E"
+if volume>33: volmoji="\uFA7F"
+if volume>66: volmoji="\uFA7D"
+if mute or volume==0: volmoji="\uFC5D"
+battery=int(popen("upower -i $(upower -e | grep 'BAT') | grep -E \"percentage\"").read().split(":")[1].strip().replace("%",""))
+batter_status=popen("upower -i `upower -e | grep 'BAT'` | grep state").read().split(":")[1].strip()
+if batter_status=="discharging":
+    if battery> 0: battermoji="\uf58d"
+    if battery>10: battermoji="\uf579"
+    if battery>20: battermoji="\uf57a"
+    if battery>30: battermoji="\uf57b"
+    if battery>40: battermoji="\uf57c"
+    if battery>50: battermoji="\uf57d"
+    if battery>60: battermoji="\uf57e"
+    if battery>70: battermoji="\uf57f"
+    if battery>80: battermoji="\uf580"
+    if battery>90: battermoji="\uf581"
+    if battery==100: battermoji="\uf578"
+else:
+    if battery> 0: battermoji="\uf58d"
+    if battery>10: battermoji="\ufd06"
+    if battery>20: battermoji="\ufd07"
+    if battery>30: battermoji="\ufd08"
+    if battery>40: battermoji="\ufd09"
+    if battery>50: battermoji="\ufd0a"
+    if battery>60: battermoji="\ufd0b"
+    if battery>70: battermoji="\ufd0c"
+    if battery>80: battermoji="\ufd0d"
+    if battery>90: battermoji="\ufd0e"
+    if battery==100: battermoji="\ufd05"
+network=len(popen("ip r").read())>1
+ssid=popen("iw dev | grep ssid").read().strip().replace("ssid ","")
+if network: wifimoji="\uf1eb" if ssid=="" else "\uf6ff"
+else: wifimoji="\nfad5"
+disk=int(popen("df / | grep /").read().split()[4].replace("%",""))
+diskmoji="\uf6d0" if disk>=90 else "\ufaed"
+date=popen("date +%H:%M").read().strip()
+sensors=popen("sensors").read()
+nvidia=popen("nvidia-smi").read().split("\n")[9]
+CPU=sensors.split("Composite:")[1].split("(")[0].strip().replace("+","")
+GPU=nvidia.split()[2].replace("C","")+".0°C"
+Adapter=sensors.split("temp1:")[1].split("(")[0].strip()
+vmstat=popen("vmstat -s").read()
+RamTotal=int(int(vmstat.split("K")[0])/1024)
+RamUsed=int(int(vmstat.split("total memory")[1].split()[0])/1024)
+SwapTotal=int(int(vmstat.split("swap cache")[1].split("K")[0].strip())/1024)
+SwapUsed=int(int(vmstat.split("total swap")[1].split("K")[0].strip())/1024)
+NvidiaUsage=nvidia.split()[12]
+AmdUsage=int(float(popen("grep 'cpu ' /proc/stat | awk '{usage=($2+$4)*100/($2+$4+$5)}; {print usage}'").read()))
+RamPercent=int(float("{:.2f}".format(RamUsed/RamTotal))*100)
+SwapPercent=int(float("{:.2f}".format(SwapUsed/SwapTotal))*100)
+print(f"\x1b[0;34m\ue0b2\x1b[0;44;44m \ue266 {AmdUsage}% {CPU} "+
+      f"\x1b[0;33;44m\ue0b2\x1b[0;30;43m \ufb19 {NvidiaUsage} {GPU} "+
+      f"\x1b[0;35;43m\ue0b2\x1b[0;37;45m \uf85a {RamPercent}% {RamUsed}/{RamTotal}MB "+
+      f"\x1b[0;36;45m\ue0b2\x1b[0;30;46m \uf9e0{SwapPercent}% {SwapUsed}/{SwapTotal}MB "+
+      f"\x1b[0;37;46m\ue0b2\x1b[0;30;47m {ssid} {wifimoji} "+
+      f"\x1b[0;32;47m\ue0b2\x1b[0;30;42m {diskmoji}{disk}% "+
+      f"\x1b[0;33;42m\ue0b2\x1b[0;30;43m {volmoji}{volume}% "+
+      f"\x1b[0;31;43m\ue0b2\x1b[0;37;41m {battery}% {battermoji} "+
+      f"\x1b[0;36;41m\ue0b2\x1b[0;37;46m {date} \uf64f \x1b[0m"
+)

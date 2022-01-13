@@ -1,0 +1,58 @@
+#!/usr/bin/env python3
+from os import system,popen
+from sys import argv,exit
+def help():
+    print("""Brightness Setter usage manual.
+This program lets you adjust brightness of your monitors.
+Can be use with shortcuts. Useful in window managers like i3.
+
+Parameters:
+    
+    -h, --help                         : Prints this help message.
+    -i, -u, --increase, --up [Monitor] : Increases the specified monitor's brightness (by default 0.1)
+    -d, --decrease, --down [Monitor]   : Decreases the specified monitor's brightness (by default 0.1)
+    -s, --set [Monitor] [Value]        : Sets the specified monitor's brightness to a exact value.
+
+Limitations:
+
+    Your brightness level must be between 0.5 and 1. Xrandr allows you make it Brighter but I don't recommend it.
+    Arguments must me provided to run this command.
+""")
+if len(argv)>2:
+    if argv[2] in [i.split()[0] for i in popen("xrandr | grep ' connected'").read().strip().split("\n")]:
+        curr=float(popen(f"xrandr --verbose --current | grep {argv[2]} -A5 | grep Brightnes").read().split()[1])
+        try: val=float(argv[3])
+        except: val=0.1
+        if argv[1] in ["-d","--decrease","--down"]:
+            amount=curr-val if curr-val>0.1 else 0.05
+            system(f"xrandr --output {argv[2]} --brightness {amount}")
+        elif argv[1] in ["-u","-i","--up","-increase"]:
+            amount=curr+val if curr+val<1 else 1
+            system(f"xrandr --output {argv[2]} --brightness {amount}")
+        elif argv[1] in ["-s","--set"]:
+            print("Please specify a value to set")
+            exit(53)
+        else:
+            help()
+            print("Error: Please specify a valid paramater.")
+            exit(22)
+        if argv[1] in ["-s","--set"]:
+            if len(argv)==4: 
+                if val>1: val=1
+                if val<0: val=0.05
+                system(f"xrandr --output {argv[2]} --brightness {val}")
+            else:
+                print("Error: Please specify a value to set brightness")
+                exit(53)
+        if len(argv)>4:
+            help()
+            print("Error: Wrong number of arguments.")
+            exit(1)
+    else:
+        help()
+        print("Error: Please specify a valid monitor.")
+        exit(53)
+else:
+    help()
+    print("Error: Please specify action and monitor name")
+    exit(1)

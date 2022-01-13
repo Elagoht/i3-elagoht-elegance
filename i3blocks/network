@@ -1,0 +1,12 @@
+#!/usr/bin/python3
+
+# This is not working, I'll fix it when I'm not busy. So I did not added to i3 blocks
+
+from os import popen
+network=len(popen("ip r").read())>1
+ssid=popen("iw dev | grep ssid").read().strip().replace("ssid ","")
+if network: wifimoji="\uf1eb" if ssid=="" else "\uf6ff"
+else: 
+    wifimoji="\ufad5"
+    ssid="No Connection"
+print(f"{wifimoji} {ssid}")

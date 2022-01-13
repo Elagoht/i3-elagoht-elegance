@@ -1,0 +1,10 @@
+configuration {
+	modi:"window,drun,run,ssh";
+	width:720;
+	lines:10;
+	font:"DroidSansMono Nerd Font Book 12";
+	show-icons:true;
+	drun-match-fields:"name,generic,exec,categories";
+	levenshtein-sort:true;
+	theme:"~/.config/rofi/themes/elagoht.rasi";
+}

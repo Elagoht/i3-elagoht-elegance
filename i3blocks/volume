@@ -1,0 +1,10 @@
+#!/usr/bin/python3
+from os import popen
+volumes=popen("amixer sget -D pulse Master | grep %").read()
+volume=int(volumes.split("[")[1].split("%")[0])
+mute=(volumes.split("[")[2].split("]")[0])=="off"
+if volume>0: volmoji="\uFA7E"
+if volume>33: volmoji="\uFA7F"
+if volume>66: volmoji="\uFA7D"
+if mute or volume==0: volmoji="\ufa80"
+print(f"{volmoji} {volume}%")

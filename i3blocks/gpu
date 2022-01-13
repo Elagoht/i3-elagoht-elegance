@@ -1,0 +1,6 @@
+#!/usr/bin/python3
+from os import popen
+nvidia=popen("nvidia-smi").read().split("\n")[9]
+GPU=nvidia.split()[2].replace("C","")+".0°C"
+NvidiaUsage=nvidia.split()[12]
+print(f"\ufb19 {NvidiaUsage} {GPU}")
