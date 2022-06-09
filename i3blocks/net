@@ -1,0 +1,40 @@
+#!/bin/bash
+INTERFACE=$1
+
+state () {
+  cat /sys/class/net/$INTERFACE/operstate
+}
+
+speed () {
+  cat /sys/class/net/$INTERFACE/speed 2> /dev/null
+}
+
+ipv4 () {
+  ip addr show $INTERFACE | perl -n -e '/inet ([^\/]+)/ && print $1'
+}
+
+OUTPUT="$INTERFACE:"
+
+if [ "$(state)" != 'up' ]; then
+  echo "$OUTPUT" "down" # full text
+  echo "$OUTPUT" "down" # short text
+  echo \#FF0000 # color
+  exit 0
+fi
+
+IPADDR=$(ipv4)
+[ -z "$IPADDR" ] && IPADDR=$(ipv4)
+
+if [ -z "$IPADDR" ]; then
+  echo "$OUTPUT" "no addr" # full text
+  echo "$OUTPUT" "no addr" # short text
+  exit 0
+fi
+
+# full text
+echo -n "$OUTPUT" "$IPADDR"
+SPEED=$(speed)
+[ -n "$SPEED" ] && echo " ($SPEED Mbits/s)" || echo
+
+# short text
+echo "$OUTPUT" "$IPADDR"
