@@ -105,7 +105,8 @@ floating_modifier $mod
 
 # Kill focused window
 bindsym $mod+Shift+q kill
-bindsym Mod1+F4 kill # for habits.
+# for habits.
+bindsym Mod1+F4 kill
 
 # Application menu and terminal
 bindsym $mod+d exec "rofi -modi drun,run -show drun"
