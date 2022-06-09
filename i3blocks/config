@@ -23,6 +23,17 @@ command=~/.config/i3blocks/disk
 interval=30
 color=#bb80b1
 
+# adjust the net-script parameter according to your PC, like "eth0" or similar for WiFi
+[Net]
+command=~/.config/i3blocks/net enp2s0
+interval=5
+color=#1a4fa3
+
+[WiFi]
+command=~/.config/i3blocks/net wlp3s0
+interval=5
+color=#1ba662
+
 [Uptime]
 command=~/.config/i3blocks/uptime
 interval=60
